@@ -1,5 +1,14 @@
+using Ticketora.Application.Features.CQRSDesignPattern.Categories.Handlers;
+using Ticketora.Persistence.Context;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<CreateCategoryCommandHandler>();
+builder.Services.AddScoped<GetCategoryQueryHandler>();
+builder.Services.AddScoped<RemoveCategoryCommandHandler>();
+builder.Services.AddScoped<UpdateCategoryCommandHandler>();
+builder.Services.AddScoped<GetByIdCategoryQueryHandler>();
+builder.Services.AddDbContext<TicketoraContext>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

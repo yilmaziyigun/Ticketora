@@ -1,0 +1,18 @@
+﻿@model Ticketora.Application.Features.CQRSDesignPattern.Categories.Commands.CreateCategoryCommand
+
+@{
+    Layout = null;
+}
+
+<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container">
+    <br />
+<form method="post">
+    <div class="form-group">
+       <input type="text" asp-for="Categoryname" class="form-control" />
+            <br />
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+        </div>
+    </form>
+</div>

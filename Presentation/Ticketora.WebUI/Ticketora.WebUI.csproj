@@ -11,9 +11,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.12" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\Ticketora.Application\Ticketora.Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Ticketora.Persistence\Ticketora.Persistence.csproj" />
   </ItemGroup>
 
