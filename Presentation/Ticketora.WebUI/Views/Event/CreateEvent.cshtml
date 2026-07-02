@@ -1,0 +1,30 @@
+﻿@model Ticketora.Application.Features.CQRSDesignPattern.Event.Commands.CreateEventCommand
+@{
+    Layout = null;
+}
+<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<div class="container">
+    <br />
+    <form method="post">
+        <label>Başlık</label>
+        <input type="text" class="form-control" asp-for="Title" />
+        <br />
+        <label>Açıklama</label>
+        <input type="text" class="form-control" asp-for="Description" />
+        <br />
+        <label>Etkinlik Tarihi</label>
+        <input type="datetime" class="form-control" asp-for="EventDate" />
+        <br />
+        <label>Lokasyon</label>
+        <input type="text" class="form-control" asp-for="Location" />
+        <br />
+        <label>Fiyat</label>
+        <input type="text" class="form-control" asp-for="Price" />
+        <br />
+        <label>Görsel</label>
+        <input type="text" class="form-control" asp-for="ImageUrl" />
+
+        <br />
+        <button class="btn btn-primary">Oluştur</button>
+    </form>
+</div>
