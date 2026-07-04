@@ -14,6 +14,12 @@ namespace Ticketora.Persistence.Context
         {
             optionsBuilder.UseSqlServer("Server=DESKTOP-9DQS8R7\\MSSQLSERVER01;initial Catalog=TicketOraDb;integrated security=true;TrustServerCertificate=True");
         }
+
+        public async Task SaveChanges(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public DbSet<Category> Categories { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Participant> Participants { get; set; }

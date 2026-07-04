@@ -1,0 +1,28 @@
+﻿@model Ticketora.Application.Features.MediatorDesignPattern.Participants.Commands.CreateParticipantsCommand
+
+@{
+    Layout = null;
+}
+<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container">
+<br />
+<form method="post">
+        <label>Name:</label>
+        <input type="text" asp-for="Name" class="form-control" />
+        <br />
+        <label>Surname:</label>
+        <input type="text" asp-for="Surname" class="form-control" />
+        <br />
+        <label>Email:</label>
+        <input type="email" asp-for="Email" class="form-control" />
+        <br />
+        <label>Phone:</label>
+        <input type="text" asp-for="PhoneNumber" class="form-control" />
+        <br />
+        <label> Tarih</label>
+        <input type="date" asp-for="CheckInDate" class="form-control" />
+        <button class="btn btn-primary">Create Participant</button>
+</form>
+
+</div>

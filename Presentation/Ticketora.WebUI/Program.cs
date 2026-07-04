@@ -1,5 +1,6 @@
 using Ticketora.Application.Features.CQRSDesignPattern.Categories.Handlers;
 using Ticketora.Application.Features.CQRSDesignPattern.Event.Handlers;
+using Ticketora.Application.Features.MediatorDesignPattern.Tickets.Queries;
 using Ticketora.Persistence.Context;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,7 @@ builder.Services.AddScoped<GetByIdCategoryQueryHandler>();
 builder.Services.AddDbContext<TicketoraContext>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetTicketQuery).Assembly));
 builder.Services.AddScoped<CreateEventCommandHandler>();
 builder.Services.AddScoped<GetEventQueryHandler>();
 builder.Services.AddScoped<RemoveEventCommandHandler>();

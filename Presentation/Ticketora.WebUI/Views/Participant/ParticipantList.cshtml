@@ -1,0 +1,39 @@
+﻿@model List<Ticketora.Application.Features.MediatorDesignPattern.Participants.Results.GetParticipantsQueryResult>
+
+@{
+    Layout = null;
+}
+<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container">
+    <br /><br />
+    <form method="post">
+        <table class="table table-bordered">
+                <tr>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>CheckInDate</th>
+                    <th>Sil</th>
+                    <th>Güncelle</th>
+                </tr>
+
+   
+                @foreach (var participant in Model)
+                {
+                    <tr>
+                        <td>@participant.Name</td>
+                        <td>@participant.Surname</td>
+                        <td>@participant.Email</td>
+                        <td>@participant.PhoneNumber</td>
+                        <td>@participant.CheckInDate</td>
+                        <td><a href="/Participant/DeleteParticipant/@participant.ParticipantId" class="btn btn-danger">Sil</a></td>
+                        <td><a href="/Participant/UpdateParticipant/@participant.ParticipantId" class="btn btn-success">Güncelle</a></td>
+                    </tr>
+                }
+                </<table>
+                <a href "/Participant/CreateParticipant" class="btn btn-primary">Create Participant</a>
+    </form>
+       
+</div>
