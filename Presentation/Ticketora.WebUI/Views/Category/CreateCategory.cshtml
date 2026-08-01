@@ -1,18 +1,24 @@
-﻿@model Ticketora.Application.Features.CQRSDesignPattern.Categories.Commands.CreateCategoryCommand
+@model Ticketora.Application.Features.CQRSDesignPattern.Categories.Commands.CreateCategoryCommand
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Yeni Kategori";
 }
 
-<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<div class="auth-shell">
+    <div class="surface p-4 p-md-5">
+        <div class="eyebrow mb-2">Kategori</div>
+        <h1 class="h3 mb-4">Yeni Kategori</h1>
 
-<div class="container">
-    <br />
-<form method="post">
-    <div class="form-group">
-       <input type="text" asp-for="Categoryname" class="form-control" />
-            <br />
-            <button type="submit" class="btn btn-primary">Kaydet</button>
-        </div>
-    </form>
+        <form method="post">
+            <div class="mb-3">
+                <label asp-for="Categoryname" class="form-label">Kategori Adı</label>
+                <input asp-for="Categoryname" class="form-control" />
+            </div>
+
+            <div class="d-grid d-sm-flex gap-2">
+                <button type="submit" class="btn btn-primary">Kaydet</button>
+                <a href="/Category/CategoryList" class="btn btn-outline-secondary">Kategorilere Dön</a>
+            </div>
+        </form>
+    </div>
 </div>

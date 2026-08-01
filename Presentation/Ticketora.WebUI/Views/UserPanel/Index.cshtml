@@ -1,0 +1,107 @@
+@model Ticketora.WebUI.Models.UserPanelViewModel
+
+@{
+    ViewData["Title"] = "Kullanıcı Paneli";
+}
+
+<div class="section-head">
+    <div>
+        <div class="eyebrow">Panel</div>
+        <h1>Kullanıcı Paneli</h1>
+        <p>@Model.Name @Model.Surname - @Model.Email</p>
+    </div>
+    <a href="/UserPanel/Profile" class="btn btn-outline-primary">Profili Güncelle</a>
+</div>
+
+<section class="metric-grid mb-4">
+    <div class="metric">
+        <span class="text-muted">Aktif Bilet</span>
+        <strong>@Model.ActiveTickets.Count</strong>
+    </div>
+    <div class="metric">
+        <span class="text-muted">Geçmiş Etkinlik</span>
+        <strong>@Model.PastTickets.Count</strong>
+    </div>
+    <div class="metric">
+        <span class="text-muted">Telefon</span>
+        <strong class="fs-5">@Model.PhoneNumber</strong>
+    </div>
+</section>
+
+<section class="surface p-0 overflow-hidden mb-4">
+    <div class="p-4 border-bottom">
+        <h2 class="h5 mb-1">Aktif Biletler</h2>
+        <p class="text-muted mb-0">Yaklaşan etkinlikler için oluşturulan dijital biletler.</p>
+    </div>
+
+    @if (!Model.ActiveTickets.Any())
+    {
+        <div class="empty-state m-4">Aktif bilet bulunmuyor.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Etkinlik</th>
+                        <th>Tarih</th>
+                        <th>Konum</th>
+                        <th>Seri No</th>
+                        <th class="text-end">Bilet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ticket in Model.ActiveTickets)
+                    {
+                        <tr>
+                            <td><strong>@ticket.EventTitle</strong></td>
+                            <td>@ticket.EventDate.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>@ticket.EventLocation</td>
+                            <td>@ticket.TicketNumber</td>
+                            <td class="text-end"><a href="/Ticket/Detail/@ticket.TicketId" class="btn btn-sm btn-primary">Görüntüle</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
+
+<section class="surface p-0 overflow-hidden">
+    <div class="p-4 border-bottom">
+        <h2 class="h5 mb-1">Geçmiş Etkinlikler</h2>
+        <p class="text-muted mb-0">Katılım geçmişi ve kullanılan bilet kayıtları.</p>
+    </div>
+
+    @if (!Model.PastTickets.Any())
+    {
+        <div class="empty-state m-4">Geçmiş etkinlik bulunmuyor.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Etkinlik</th>
+                        <th>Tarih</th>
+                        <th>Konum</th>
+                        <th>Seri No</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ticket in Model.PastTickets)
+                    {
+                        <tr>
+                            <td><strong>@ticket.EventTitle</strong></td>
+                            <td>@ticket.EventDate.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>@ticket.EventLocation</td>
+                            <td>@ticket.TicketNumber</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

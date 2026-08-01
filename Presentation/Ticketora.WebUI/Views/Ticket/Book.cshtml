@@ -1,0 +1,152 @@
+@model Ticketora.Application.Features.MediatorDesignPattern.Tickets.Commands.BookTicketCommand
+
+@{
+    ViewData["Title"] = "Rezervasyon";
+}
+
+<div class="booking-layout">
+    <section class="surface p-4">
+        <div class="eyebrow mb-2">Rezervasyon</div>
+        <h1 class="h3 mb-4">Bilet bilgilerini tamamla</h1>
+
+        <form method="post">
+            <input type="hidden" asp-for="EventId" />
+            <input type="hidden" asp-for="UserId" />
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Name" class="form-label">Ad</label>
+                    <input asp-for="Name" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Surname" class="form-label">Soyad</label>
+                    <input asp-for="Surname" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label">E-posta</label>
+                    <input asp-for="Email" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="PhoneNumber" class="form-label">Telefon</label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                </div>
+                <div class="col-12">
+                    <label asp-for="SeatNumber" class="form-label">Koltuk</label>
+                    <input asp-for="SeatNumber" class="form-control" placeholder="Opsiyonel" />
+                </div>
+            </div>
+
+            <section class="booking-payment mt-4">
+                <div class="booking-step-title">
+                    <span>2</span>
+                    <div>
+                        <h2>Güvenli Ödeme Bilgileri</h2>
+                        <p>Demo kart alanıdır, gerçek ödeme işlemi yapılmaz.</p>
+                    </div>
+                </div>
+
+                <div class="payment-panel">
+                    <div class="payment-card-preview" aria-hidden="true">
+                        <div class="payment-card-top">
+                            <span class="payment-card-logo">TK</span>
+                            <strong>TICKETORA</strong>
+                            <span>KREDİ KARTI</span>
+                        </div>
+
+                        <div>
+                            <span class="payment-card-label">Kart Numarası</span>
+                            <strong class="payment-card-number" data-card-preview="number">•••• •••• •••• 4820</strong>
+                        </div>
+
+                        <div class="payment-card-bottom">
+                            <div>
+                                <span class="payment-card-label">Kart Sahibi</span>
+                                <strong data-card-preview="name">@($"{Model.Name} {Model.Surname}".Trim())</strong>
+                            </div>
+                            <div>
+                                <span class="payment-card-label">SKT</span>
+                                <strong data-card-preview="expiry">12/29</strong>
+                            </div>
+                            <div>
+                                <span class="payment-card-label">CVV</span>
+                                <strong data-card-preview="cvv">•••</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="payment-fields">
+                        <div class="row g-3">
+                             <div class="col-lg-12">
+                                <label class="form-label" for="paymentCardNumber">Kart Numarası</label>
+                                <input class="form-control form-control-lg"
+                                       id="paymentCardNumber"
+                                       name="PaymentCardNumber"
+                                       inputmode="numeric"
+                                       maxlength="19"
+                                       placeholder="4000 1234 5678 9010"
+                                       autocomplete="cc-number"
+                                       data-card-input="number" />
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label" for="paymentCardName">Kart Üzerindeki İsim</label>
+                                <input class="form-control form-control-lg"
+                                       id="paymentCardName"
+                                       name="PaymentCardName"
+                                       value="@($"{Model.Name} {Model.Surname}".Trim())"
+                                       autocomplete="cc-name"
+                                       data-card-input="name" />
+                            </div>
+
+                           
+
+                            <div class="col-6 col-lg-3">
+                                <label class="form-label" for="paymentExpiry">SKT</label>
+                                <input class="form-control form-control-lg"
+                                       id="paymentExpiry"
+                                       name="PaymentExpiry"
+                                       inputmode="numeric"
+                                       maxlength="5"
+                                       placeholder="12/29"
+                                       autocomplete="cc-exp"
+                                       data-card-input="expiry" />
+                            </div>
+
+                            <div class="col-6 col-lg-3">
+                                <label class="form-label" for="paymentCvv">CVV</label>
+                                <input class="form-control form-control-lg"
+                                       id="paymentCvv"
+                                       name="PaymentCvv"
+                                       inputmode="numeric"
+                                       maxlength="3"
+                                       placeholder="•••"
+                                       autocomplete="cc-csc"
+                                       data-card-input="cvv" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <button class="btn btn-primary btn-lg w-100 mt-4">Ödemeyi Tamamla ve Bileti Oluştur</button>
+        </form>
+    </section>
+
+    <aside class="surface p-4">
+        <div class="eyebrow mb-2">Seçilen Etkinlik</div>
+        <h2 class="h4">@ViewBag.EventTitle</h2>
+        <div class="info-list mt-4">
+            <div class="info-item">
+                <span>Tarih</span>
+                <strong>@(((DateTime)ViewBag.EventDate).ToString("dd.MM.yyyy HH:mm"))</strong>
+            </div>
+            <div class="info-item">
+                <span>Konum</span>
+                <strong>@ViewBag.Location</strong>
+            </div>
+            <div class="info-item">
+                <span>Fiyat</span>
+                <strong>@ViewBag.Price.ToString("C")</strong>
+            </div>
+        </div>
+    </aside>
+</div>

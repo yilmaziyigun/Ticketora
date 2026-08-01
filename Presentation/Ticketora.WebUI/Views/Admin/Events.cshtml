@@ -1,0 +1,60 @@
+@model List<Ticketora.Application.Features.CQRSDesignPattern.Event.Results.GetEventQueryResult>
+
+@{
+    ViewData["Title"] = "Admin Etkinlikler";
+}
+
+<div class="section-head">
+    <div>
+        <div class="eyebrow">Admin</div>
+        <h1>Etkinlik Yönetimi</h1>
+        <p>Public etkinlik listesinden ayrı yönetim alanı.</p>
+    </div>
+    <a href="/Event/CreateEvent" class="btn btn-primary">Yeni Etkinlik</a>
+</div>
+
+<div class="surface p-0 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Etkinlik</th>
+                    <th>Kategori</th>
+                    <th>Tarih</th>
+                    <th>Konum</th>
+                    <th>Kontenjan</th>
+                    <th>Fiyat</th>
+                    <th>Durum</th>
+                    <th class="text-end">İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><strong>@item.Title</strong></td>
+                        <td>@item.CategoryName</td>
+                        <td>@item.EventDate.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>@item.Location</td>
+                        <td>
+                            @if (item.Capacity > 0)
+                            {
+                                <span>@item.SoldTicketCount / @item.Capacity</span>
+                            }
+                            else
+                            {
+                                <span>Tanımlı değil</span>
+                            }
+                        </td>
+                        <td>@item.Price.ToString("C")</td>
+                        <td>@(item.Status ? "Aktif" : "Pasif")</td>
+                        <td class="text-end">
+                            <a href="/Event/Detail/@item.EventId" class="btn btn-sm btn-outline-primary">Detay</a>
+                            <a href="/Event/DeleteEvent/@item.EventId" class="btn btn-sm btn-outline-danger">Sil</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

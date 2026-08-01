@@ -1,30 +1,62 @@
-﻿@model Ticketora.Application.Features.CQRSDesignPattern.Event.Commands.CreateEventCommand
-@{
-    Layout = null;
-}
-<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-<div class="container">
-    <br />
-    <form method="post">
-        <label>Başlık</label>
-        <input type="text" class="form-control" asp-for="Title" />
-        <br />
-        <label>Açıklama</label>
-        <input type="text" class="form-control" asp-for="Description" />
-        <br />
-        <label>Etkinlik Tarihi</label>
-        <input type="datetime" class="form-control" asp-for="EventDate" />
-        <br />
-        <label>Lokasyon</label>
-        <input type="text" class="form-control" asp-for="Location" />
-        <br />
-        <label>Fiyat</label>
-        <input type="text" class="form-control" asp-for="Price" />
-        <br />
-        <label>Görsel</label>
-        <input type="text" class="form-control" asp-for="ImageUrl" />
+@model Ticketora.Application.Features.CQRSDesignPattern.Event.Commands.CreateEventCommand
+@using Ticketora.Application.Features.CQRSDesignPattern.Categories.Results
 
-        <br />
-        <button class="btn btn-primary">Oluştur</button>
-    </form>
+@{
+    ViewData["Title"] = "Yeni Etkinlik";
+    var categories = ViewBag.Categories as List<GetCategoryQueryResult> ?? new List<GetCategoryQueryResult>();
+}
+
+<div class="auth-shell wide">
+    <div class="surface p-4 p-md-5">
+        <div class="eyebrow mb-2">Etkinlik</div>
+        <h1 class="h3 mb-4">Yeni Etkinlik Oluştur</h1>
+
+        <form method="post">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Title" class="form-label">Başlık</label>
+                    <input asp-for="Title" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="EventDate" class="form-label">Etkinlik Tarihi</label>
+                    <input asp-for="EventDate" type="datetime-local" class="form-control" />
+                </div>
+                <div class="col-12">
+                    <label asp-for="Description" class="form-label">Açıklama</label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Location" class="form-label">Lokasyon</label>
+                    <input asp-for="Location" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Price" class="form-label">Fiyat</label>
+                    <input asp-for="Price" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="CategoryId" class="form-label">Kategori</label>
+                    <select asp-for="CategoryId" class="form-select">
+                        <option value="">Kategori seç</option>
+                        @foreach (var category in categories)
+                        {
+                            <option value="@category.CategoryId">@category.CategoryName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Capacity" class="form-label">Kapasite</label>
+                    <input asp-for="Capacity" class="form-control" />
+                </div>
+                <div class="col-12">
+                    <label asp-for="ImageUrl" class="form-label">Görsel URL</label>
+                    <input asp-for="ImageUrl" class="form-control" />
+                </div>
+            </div>
+
+            <div class="d-grid d-sm-flex gap-2 mt-4">
+                <button class="btn btn-primary">Oluştur</button>
+                <a href="/Admin/Events" class="btn btn-outline-secondary">Admin Etkinliklerine Dön</a>
+            </div>
+        </form>
+    </div>
 </div>

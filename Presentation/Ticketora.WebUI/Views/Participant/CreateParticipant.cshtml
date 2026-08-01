@@ -1,27 +1,54 @@
-﻿@model Ticketora.Application.Features.MediatorDesignPattern.Participants.Commands.CreateParticipantsCommand
+@model Ticketora.Application.Features.MediatorDesignPattern.Participants.Commands.CreateParticipantsCommand
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Yeni Katılımcı";
+    var roles = ViewBag.Roles as IEnumerable<string> ?? Array.Empty<string>();
 }
 
-<div class="container">
-<br />
-<form method="post">
-        <label>Name:</label>
-        <input type="text" asp-for="Name" class="form-control" />
-        <br />
-        <label>Surname:</label>
-        <input type="text" asp-for="Surname" class="form-control" />
-        <br />
-        <label>Email:</label>
-        <input type="email" asp-for="Email" class="form-control" />
-        <br />
-        <label>Phone:</label>
-        <input type="text" asp-for="PhoneNumber" class="form-control" />
-        <br />
-        <label> Tarih</label>
-        <input type="date" asp-for="CheckInDate" class="form-control" />
-        <button class="btn btn-primary">Create Participant</button>
-</form>
+<div class="auth-shell wide">
+    <div class="surface p-4 p-md-5">
+        <div class="eyebrow mb-2">Katılımcı</div>
+        <h1 class="h3 mb-4">Yeni Katılımcı</h1>
 
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Name" class="form-label">Ad</label>
+                    <input asp-for="Name" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Surname" class="form-label">Soyad</label>
+                    <input asp-for="Surname" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label">E-posta</label>
+                    <input asp-for="Email" type="email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="PhoneNumber" class="form-label">Telefon</label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                </div>
+               
+                <div class="col-12">
+                    <label asp-for="Role" class="form-label">Rol</label>
+                    <select asp-for="Role" class="form-select">
+                        <option value="">Rol seçiniz</option>
+                        @foreach (var role in roles)
+                        {
+                            <option value="@role">@role</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Role" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="d-grid d-sm-flex gap-2 mt-4">
+                <button class="btn btn-primary">Oluştur</button>
+                <a href="/Participant/ParticipantList" class="btn btn-outline-secondary">Katılımcılara Dön</a>
+            </div>
+        </form>
+    </div>
 </div>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ticketora.Application.Features.MediatorDesignPattern.Tickets.Commands
 {
-    public class CreateTicketCommand: IRequest
+    public class CreateTicketCommand : IRequest
     {
         public string TicketNumber { get; set; }
         public decimal Price { get; set; }

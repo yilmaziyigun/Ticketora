@@ -1,8 +1,1378 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Ana Sayfa";
+
+    var upcomingEvents = ViewBag.UpcomingEvents ?? 0;
+    var cityCount = ViewBag.CityCount ?? 0;
+    var concertEvents = ViewBag.ConcertEvents ?? 0;
+    var cinemaEvents = ViewBag.CinemaEvents ?? 0;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    :root {
+        --ticketora-primary: #6d5dfc;
+        --ticketora-primary-dark: #5143df;
+        --ticketora-secondary: #ff4f86;
+        --ticketora-dark: #0d1020;
+        --ticketora-card: #171a2d;
+        --ticketora-text: #f7f7fb;
+        --ticketora-muted: #a9adc4;
+        --ticketora-border: rgba(255, 255, 255, .10);
+    }
+
+    body {
+        background: radial-gradient(circle at 15% 10%, rgba(109, 93, 252, .14), transparent 30%), radial-gradient(circle at 85% 30%, rgba(255, 79, 134, .10), transparent 28%), #f6f7fb;
+    }
+
+    .ticketora-home {
+        padding-bottom: 80px;
+    }
+
+    /* HERO */
+
+    .ticketora-hero {
+        position: relative;
+        min-height: 610px;
+        overflow: hidden;
+        border-radius: 0 0 42px 42px;
+        color: #fff;
+        background: linear-gradient(90deg, rgba(8, 10, 24, .97) 0%, rgba(8, 10, 24, .90) 38%, rgba(8, 10, 24, .48) 70%, rgba(8, 10, 24, .78) 100%), url("https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=2000&q=90") center 45% / cover no-repeat;
+        box-shadow: 0 30px 70px rgba(13, 16, 32, .20);
+    }
+
+        .ticketora-hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 72% 40%, rgba(255, 79, 134, .24), transparent 26%), linear-gradient(to top, rgba(8, 10, 24, .82), transparent 50%);
+            pointer-events: none;
+        }
+
+    .hero-navbar-space {
+        height: 20px;
+    }
+
+    .ticketora-hero-content {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: minmax(0, 1.25fr) minmax(310px, .75fr);
+        align-items: center;
+        gap: 70px;
+        min-height: 610px;
+        padding-top: 60px;
+        padding-bottom: 60px;
+    }
+
+    .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        width: fit-content;
+        margin-bottom: 22px;
+        padding: 9px 15px;
+        border: 1px solid rgba(255, 255, 255, .15);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, .09);
+        backdrop-filter: blur(14px);
+        font-size: .82rem;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: #fff;
+    }
+
+    .hero-eyebrow-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ff4f86;
+        box-shadow: 0 0 0 6px rgba(255, 79, 134, .15);
+    }
+
+    .hero-title {
+        max-width: 820px;
+        margin-bottom: 22px;
+        font-size: clamp(3.5rem, 7vw, 6.7rem);
+        font-weight: 900;
+        line-height: .92;
+        letter-spacing: -.065em;
+    }
+
+        .hero-title span {
+            display: block;
+            background: linear-gradient(90deg, #ffffff 5%, #d9d4ff 45%, #ff94b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+    .hero-description {
+        max-width: 680px;
+        margin-bottom: 30px;
+        font-size: 1.12rem;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, .72);
+    }
+
+    .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .ticketora-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-height: 54px;
+        padding: 0 24px;
+        border: 0;
+        border-radius: 15px;
+        font-size: .96rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: .25s ease;
+    }
+
+    .ticketora-btn-primary {
+        color: #fff;
+        background: linear-gradient(135deg, var(--ticketora-primary), #8d68ff);
+        box-shadow: 0 16px 35px rgba(109, 93, 252, .35);
+    }
+
+        .ticketora-btn-primary:hover {
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 20px 42px rgba(109, 93, 252, .48);
+        }
+
+    .ticketora-btn-light {
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, .20);
+        background: rgba(255, 255, 255, .09);
+        backdrop-filter: blur(12px);
+    }
+
+        .ticketora-btn-light:hover {
+            color: #fff;
+            border-color: rgba(255, 255, 255, .38);
+            background: rgba(255, 255, 255, .16);
+            transform: translateY(-3px);
+        }
+
+    .hero-trust {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 22px;
+        margin-top: 34px;
+        color: rgba(255, 255, 255, .68);
+        font-size: .88rem;
+        font-weight: 600;
+    }
+
+    .hero-trust-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .hero-trust-icon {
+        display: grid;
+        place-items: center;
+        width: 29px;
+        height: 29px;
+        border-radius: 9px;
+        color: #d8d2ff;
+        background: rgba(255, 255, 255, .10);
+    }
+
+    /* HERO TICKET */
+
+    .hero-ticket-wrapper {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .hero-ticket {
+        position: relative;
+        width: 100%;
+        max-width: 380px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, .16);
+        border-radius: 28px;
+        background: rgba(16, 18, 38, .70);
+        box-shadow: 0 35px 80px rgba(0, 0, 0, .35);
+        backdrop-filter: blur(24px);
+        transform: rotate(2deg);
+    }
+
+        .hero-ticket::before,
+        .hero-ticket::after {
+            content: "";
+            position: absolute;
+            top: 58%;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #121526;
+            transform: translateY(-50%);
+            z-index: 3;
+        }
+
+        .hero-ticket::before {
+            left: -15px;
+        }
+
+        .hero-ticket::after {
+            right: -15px;
+        }
+
+    .hero-ticket-image {
+        position: relative;
+        height: 210px;
+        background: linear-gradient(to top, rgba(16, 18, 38, .95), transparent 65%), url("https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&w=900&q=85") center / cover;
+    }
+
+    .ticket-live-badge {
+        position: absolute;
+        top: 18px;
+        left: 18px;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255, 79, 134, .92);
+        font-size: .75rem;
+        font-weight: 800;
+        letter-spacing: .04em;
+    }
+
+    .hero-ticket-body {
+        padding: 24px;
+    }
+
+    .hero-ticket-category {
+        margin-bottom: 8px;
+        color: #a99cff;
+        font-size: .76rem;
+        font-weight: 800;
+        letter-spacing: .10em;
+        text-transform: uppercase;
+    }
+
+    .hero-ticket-title {
+        margin-bottom: 18px;
+        font-size: 1.5rem;
+        font-weight: 800;
+        line-height: 1.25;
+    }
+
+    .hero-ticket-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        padding-bottom: 22px;
+        border-bottom: 1px dashed rgba(255, 255, 255, .18);
+    }
+
+    .ticket-info-item small {
+        display: block;
+        margin-bottom: 4px;
+        color: rgba(255, 255, 255, .45);
+        font-size: .72rem;
+    }
+
+    .ticket-info-item strong {
+        font-size: .88rem;
+    }
+
+    .hero-ticket-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding-top: 22px;
+    }
+
+    .ticket-price small {
+        display: block;
+        color: rgba(255, 255, 255, .45);
+        font-size: .72rem;
+    }
+
+    .ticket-price strong {
+        font-size: 1.35rem;
+    }
+
+    .ticket-qr {
+        display: grid;
+        grid-template-columns: repeat(5, 6px);
+        gap: 3px;
+        padding: 10px;
+        border-radius: 10px;
+        background: #fff;
+    }
+
+        .ticket-qr span {
+            width: 6px;
+            height: 6px;
+            border-radius: 1px;
+            background: #15172a;
+        }
+
+            .ticket-qr span:nth-child(2n) {
+                opacity: .15;
+            }
+
+    /* STATS */
+
+    .stats-wrapper {
+        position: relative;
+        z-index: 5;
+        margin-top: -48px;
+    }
+
+    .ticketora-stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        overflow: hidden;
+        border: 1px solid rgba(23, 26, 45, .07);
+        border-radius: 24px;
+        background: rgba(255, 255, 255, .94);
+        box-shadow: 0 24px 60px rgba(25, 28, 50, .12);
+        backdrop-filter: blur(20px);
+    }
+
+    .stat-card {
+        position: relative;
+        padding: 28px 30px;
+    }
+
+        .stat-card:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            top: 25%;
+            right: 0;
+            width: 1px;
+            height: 50%;
+            background: #e8e9f1;
+        }
+
+        .stat-card small {
+            display: block;
+            margin-bottom: 8px;
+            color: #85899e;
+            font-size: .77rem;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+
+        .stat-card strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #171a2d;
+            font-size: 2.25rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .stat-card span {
+            color: #9296a9;
+            font-size: .82rem;
+        }
+
+    /* COMMON SECTIONS */
+
+    .home-section {
+        padding-top: 82px;
+    }
+
+    .section-heading {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .section-eyebrow {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--ticketora-primary);
+        font-size: .76rem;
+        font-weight: 800;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+    }
+
+    .section-title {
+        margin: 0;
+        color: #171a2d;
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 900;
+        letter-spacing: -.045em;
+    }
+
+    .section-description {
+        max-width: 590px;
+        margin: 10px 0 0;
+        color: #85899e;
+        line-height: 1.7;
+    }
+
+    .section-link {
+        flex-shrink: 0;
+        color: #474b60;
+        font-size: .9rem;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+        .section-link:hover {
+            color: var(--ticketora-primary);
+        }
+
+    /* CATEGORIES */
+
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 15px;
+    }
+
+    .category-card {
+        position: relative;
+        min-height: 155px;
+        overflow: hidden;
+        padding: 22px;
+        border: 1px solid rgba(23, 26, 45, .07);
+        border-radius: 22px;
+        color: #171a2d;
+        background: #fff;
+        box-shadow: 0 12px 35px rgba(26, 29, 52, .06);
+        text-decoration: none;
+        transition: .28s ease;
+    }
+
+        .category-card::before {
+            content: "";
+            position: absolute;
+            right: -30px;
+            bottom: -45px;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: var(--category-color);
+            opacity: .10;
+            transition: .28s ease;
+        }
+
+        .category-card:hover {
+            color: #171a2d;
+            transform: translateY(-7px);
+            box-shadow: 0 20px 45px rgba(26, 29, 52, .13);
+        }
+
+            .category-card:hover::before {
+                transform: scale(1.5);
+                opacity: .15;
+            }
+
+    .category-icon {
+        display: grid;
+        place-items: center;
+        width: 50px;
+        height: 50px;
+        margin-bottom: 23px;
+        border-radius: 16px;
+        color: var(--category-color);
+        background: color-mix(in srgb, var(--category-color) 12%, white);
+    }
+
+        .category-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+    .category-card strong {
+        position: relative;
+        z-index: 2;
+        display: block;
+        margin-bottom: 4px;
+        font-size: 1rem;
+    }
+
+    .category-card small {
+        position: relative;
+        z-index: 2;
+        color: #9699aa;
+        font-size: .78rem;
+    }
+
+    /* EVENT CARDS */
+
+    .event-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+    }
+
+    .event-card {
+        overflow: hidden;
+        border: 1px solid rgba(23, 26, 45, .07);
+        border-radius: 24px;
+        background: #fff;
+        box-shadow: 0 15px 40px rgba(26, 29, 52, .07);
+        transition: .3s ease;
+    }
+
+        .event-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 24px 55px rgba(26, 29, 52, .15);
+        }
+
+    .event-image {
+        position: relative;
+        height: 250px;
+        overflow: hidden;
+    }
+
+        .event-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: .5s ease;
+        }
+
+    .event-card:hover .event-image img {
+        transform: scale(1.06);
+    }
+
+    .event-image::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(13, 16, 32, .65), transparent 55%);
+    }
+
+    .event-category-badge {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        z-index: 2;
+        padding: 8px 12px;
+        border-radius: 999px;
+        color: #fff;
+        background: rgba(13, 16, 32, .68);
+        backdrop-filter: blur(12px);
+        font-size: .72rem;
+        font-weight: 800;
+    }
+
+    .event-favorite {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        z-index: 2;
+        display: grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        border: 0;
+        border-radius: 13px;
+        color: #fff;
+        background: rgba(13, 16, 32, .60);
+        backdrop-filter: blur(12px);
+        transition: .2s ease;
+    }
+
+        .event-favorite:hover {
+            color: #ff6f9d;
+            background: #fff;
+        }
+
+    .event-date-box {
+        position: absolute;
+        right: 16px;
+        bottom: 16px;
+        z-index: 2;
+        min-width: 58px;
+        padding: 9px 10px;
+        border-radius: 15px;
+        text-align: center;
+        color: #171a2d;
+        background: #fff;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, .16);
+    }
+
+        .event-date-box strong {
+            display: block;
+            font-size: 1.25rem;
+            line-height: 1;
+        }
+
+        .event-date-box small {
+            font-size: .66rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+    .event-content {
+        padding: 22px;
+    }
+
+        .event-content h3 {
+            min-height: 52px;
+            margin-bottom: 13px;
+            color: #171a2d;
+            font-size: 1.22rem;
+            font-weight: 800;
+            line-height: 1.35;
+        }
+
+    .event-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 20px;
+        color: #85899e;
+        font-size: .83rem;
+    }
+
+    .event-meta-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .event-meta-row svg {
+            flex-shrink: 0;
+            width: 17px;
+            height: 17px;
+            color: var(--ticketora-primary);
+        }
+
+    .event-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        padding-top: 18px;
+        border-top: 1px solid #eceef4;
+    }
+
+    .event-price small {
+        display: block;
+        margin-bottom: 2px;
+        color: #9b9eaf;
+        font-size: .69rem;
+    }
+
+    .event-price strong {
+        color: #171a2d;
+        font-size: 1.2rem;
+    }
+
+    .event-detail-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 0 17px;
+        border-radius: 12px;
+        color: #fff;
+        background: #171a2d;
+        font-size: .82rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: .2s ease;
+    }
+
+        .event-detail-btn:hover {
+            color: #fff;
+            background: var(--ticketora-primary);
+        }
+
+    /* PROMO */
+
+    .ticketora-promo {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1.1fr .9fr;
+        align-items: center;
+        min-height: 370px;
+        overflow: hidden;
+        margin-top: 85px;
+        border-radius: 30px;
+        color: #fff;
+        background: linear-gradient(100deg, rgba(20, 22, 45, .98) 0%, rgba(37, 31, 83, .94) 48%, rgba(39, 28, 79, .55) 100%), url("https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1700&q=85") center / cover;
+        box-shadow: 0 30px 70px rgba(45, 37, 104, .22);
+    }
+
+    .promo-content {
+        position: relative;
+        z-index: 2;
+        padding: 55px;
+    }
+
+        .promo-content h2 {
+            max-width: 650px;
+            margin-bottom: 16px;
+            font-size: clamp(2.1rem, 4vw, 3.5rem);
+            font-weight: 900;
+            letter-spacing: -.05em;
+        }
+
+        .promo-content p {
+            max-width: 610px;
+            margin-bottom: 25px;
+            color: rgba(255, 255, 255, .68);
+            line-height: 1.75;
+        }
+
+    .promo-visual {
+        position: relative;
+        align-self: stretch;
+    }
+
+    .promo-circle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: grid;
+        place-items: center;
+        width: 230px;
+        height: 230px;
+        border: 1px solid rgba(255, 255, 255, .18);
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .08);
+        box-shadow: 0 0 0 30px rgba(255, 255, 255, .035), 0 0 0 65px rgba(255, 255, 255, .025);
+        backdrop-filter: blur(15px);
+        transform: translate(-50%, -50%);
+    }
+
+        .promo-circle strong {
+            font-size: 4rem;
+            font-weight: 900;
+        }
+
+        .promo-circle span {
+            margin-top: -25px;
+            color: rgba(255, 255, 255, .58);
+            font-size: .76rem;
+            font-weight: 800;
+            letter-spacing: .10em;
+            text-transform: uppercase;
+        }
+
+    /* RESPONSIVE */
+
+    @@media (max-width: 1199.98px) {
+        .ticketora-hero-content {
+            gap: 35px;
+        }
+
+        .category-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @@media (max-width: 991.98px) {
+        .ticketora-hero {
+            min-height: auto;
+            border-radius: 0 0 30px 30px;
+        }
+
+        .ticketora-hero-content {
+            grid-template-columns: 1fr;
+            min-height: auto;
+            padding-top: 80px;
+            padding-bottom: 105px;
+        }
+
+        .hero-title {
+            max-width: 720px;
+        }
+
+        .hero-ticket-wrapper {
+            display: none;
+        }
+
+        .ticketora-stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .stat-card:nth-child(2)::after {
+            display: none;
+        }
+
+        .stat-card:nth-child(-n+2) {
+            border-bottom: 1px solid #e8e9f1;
+        }
+
+        .event-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .ticketora-promo {
+            grid-template-columns: 1fr;
+        }
+
+        .promo-visual {
+            display: none;
+        }
+    }
+
+    @@media (max-width: 767.98px) {
+        .ticketora-hero {
+            border-radius: 0 0 24px 24px;
+        }
+
+        .ticketora-hero-content {
+            padding-top: 65px;
+            padding-bottom: 85px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+        }
+
+        .hero-description {
+            font-size: 1rem;
+        }
+
+        .hero-actions {
+            flex-direction: column;
+        }
+
+        .ticketora-btn {
+            width: 100%;
+        }
+
+        .hero-trust {
+            gap: 13px;
+        }
+
+        .stats-wrapper {
+            margin-top: -35px;
+        }
+
+        .ticketora-stats {
+            grid-template-columns: 1fr;
+        }
+
+        .stat-card {
+            padding: 22px;
+        }
+
+            .stat-card::after {
+                display: none !important;
+            }
+
+            .stat-card:not(:last-child) {
+                border-bottom: 1px solid #e8e9f1;
+            }
+
+        .category-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .event-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .section-heading {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .promo-content {
+            padding: 36px 25px;
+        }
+
+        .ticketora-promo {
+            min-height: auto;
+            margin-top: 65px;
+            border-radius: 24px;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .hero-title {
+            font-size: 3rem;
+        }
+
+        .category-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .category-card {
+            min-height: auto;
+        }
+    }
+
+    .ticketora-home {
+        --ticketora-primary: #2457d6;
+        --ticketora-primary-dark: #173f9f;
+        --ticketora-secondary: #e84979;
+        --ticketora-dark: #0d1b2f;
+        --ticketora-card: #111c31;
+        --ticketora-muted: #b8c3d6;
+    }
+
+    .hero-title,
+    .section-title,
+    .promo-content h2 {
+        letter-spacing: 0;
+    }
+
+    .ticketora-btn,
+    .hero-ticket,
+    .event-card,
+    .category-card,
+    .category-icon,
+    .event-favorite,
+    .event-date-box,
+    .event-detail-btn,
+    .ticketora-promo,
+    .promo-circle,
+    .ticketora-stats {
+        border-radius: 8px;
+    }
+
+    .ticketora-stats,
+    .category-card,
+    .event-card {
+        border-color: rgba(216, 226, 238, .92);
+        box-shadow: 0 14px 34px rgba(15, 23, 42, .08);
+    }
+
+    .ticketora-hero {
+        border-radius: 0;
+    }
+
+    .section-eyebrow,
+    .hero-ticket-category {
+        color: var(--ticketora-primary);
+    }
+
+    .ticketora-btn-primary {
+        background: linear-gradient(135deg, var(--ticketora-primary), #0f9f8f);
+        box-shadow: 0 16px 35px rgba(36, 87, 214, .28);
+    }
+
+    .ticketora-btn-primary:hover {
+        box-shadow: 0 20px 42px rgba(36, 87, 214, .36);
+    }
+
+    .ticketora-promo {
+        background:
+            linear-gradient(100deg, rgba(13, 27, 47, .96) 0%, rgba(20, 49, 94, .9) 50%, rgba(15, 159, 143, .34) 100%),
+            url("https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1700&q=85") center / cover;
+    }
+</style>
+
+<div class="ticketora-home">
+
+    <!-- HERO -->
+    <section class="ticketora-hero">
+        <div class="container ticketora-hero-content">
+
+            <div>
+                <div class="hero-eyebrow">
+                    <span class="hero-eyebrow-dot"></span>
+                    Şehrin ritmini yakala
+                </div>
+
+                <h1 class="hero-title">
+                    Unutulmaz anlara
+                    <span>biletin hazır.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Konserlerden tiyatro oyunlarına, stand-up gösterilerinden özel talk show
+                    programlarına kadar şehrin en sevilen etkinliklerini keşfet.
+                    Biletini güvenle al, dijital olarak sakla ve eğlenceye katıl.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="/Event/EventList"
+                       class="ticketora-btn ticketora-btn-primary">
+
+                        Etkinlikleri Keşfet
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             width="18"
+                             height="18"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2.2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <path d="M5 12h14"></path>
+                            <path d="m13 6 6 6-6 6"></path>
+                        </svg>
+                    </a>
+
+                    <a href="/Account/Register"
+                       class="ticketora-btn ticketora-btn-light">
+
+                        Ücretsiz Üye Ol
+                    </a>
+                </div>
+
+                <div class="hero-trust">
+                    <div class="hero-trust-item">
+                        <span class="hero-trust-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 width="16"
+                                 height="16"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2">
+                                <path d="M20 6 9 17l-5-5"></path>
+                            </svg>
+                        </span>
+                        Güvenli ödeme
+                    </div>
+
+                    <div class="hero-trust-item">
+                        <span class="hero-trust-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 width="16"
+                                 height="16"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2">
+                                <rect width="18" height="14" x="3" y="5" rx="2"></rect>
+                                <path d="M7 15h.01"></path>
+                                <path d="M11 15h2"></path>
+                            </svg>
+                        </span>
+                        Anında dijital bilet
+                    </div>
+
+                    <div class="hero-trust-item">
+                        <span class="hero-trust-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 width="16"
+                                 height="16"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2">
+                                <path d="M12 2a10 10 0 1 0 10 10"></path>
+                                <path d="M12 6v6l4 2"></path>
+                            </svg>
+                        </span>
+                        7/24 hızlı erişim
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-ticket-wrapper">
+                <div class="hero-ticket">
+
+                    <div class="hero-ticket-image">
+                        <span class="ticket-live-badge">
+                            <span class="hero-eyebrow-dot"></span>
+                            Canlı Konser
+                        </span>
+                    </div>
+
+                    <div class="hero-ticket-body">
+                        <div class="hero-ticket-category">
+                            Ticketora Özel
+                        </div>
+
+                        <h2 class="hero-ticket-title">
+                            İstanbul Müzik Gecesi
+                        </h2>
+
+                        <div class="hero-ticket-info">
+                            <div class="ticket-info-item">
+                                <small>Tarih</small>
+                                <strong>24 Ağustos 2026</strong>
+                            </div>
+
+                            <div class="ticket-info-item">
+                                <small>Saat</small>
+                                <strong>21:00</strong>
+                            </div>
+
+                            <div class="ticket-info-item">
+                                <small>Mekân</small>
+                                <strong>Festival Park</strong>
+                            </div>
+
+                            <div class="ticket-info-item">
+                                <small>Konum</small>
+                                <strong>İstanbul</strong>
+                            </div>
+                        </div>
+
+                        <div class="hero-ticket-bottom">
+                            <div class="ticket-price">
+                                <small>Başlangıç fiyatı</small>
+                                <strong>₺750</strong>
+                            </div>
+
+                            <div class="ticket-qr" aria-label="Dijital bilet QR kodu">
+                                @for (var i = 0; i < 25; i++)
+                                {
+                                    <span></span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- STATISTICS -->
+    <div class="container stats-wrapper">
+        <section class="ticketora-stats">
+
+            <div class="stat-card">
+                <small>Yaklaşan etkinlik</small>
+                <strong>@upcomingEvents</strong>
+                <span>Yeni deneyim seni bekliyor.</span>
+            </div>
+
+            <div class="stat-card">
+                <small>Aktif şehir</small>
+                <strong>@cityCount</strong>
+                <span>Türkiye'nin farklı noktalarında.</span>
+            </div>
+
+            <div class="stat-card">
+                <small>Konser</small>
+                <strong>@concertEvents</strong>
+                <span>Canlı müzik ve festival programı.</span>
+            </div>
+
+            <div class="stat-card">
+                <small>Sinema</small>
+                <strong>@cinemaEvents</strong>
+                <span>Özel gösterim ve film etkinliği.</span>
+            </div>
+
+        </section>
+    </div>
+
+    <!-- CATEGORIES -->
+    <section class="container home-section">
+
+        <div class="section-heading">
+            <div>
+                <span class="section-eyebrow">Kategoriler</span>
+
+                <h2 class="section-title">
+                    Moduna uygun etkinliği bul
+                </h2>
+
+                <p class="section-description">
+                    Müzikten sahne sanatlarına, kahkahadan ilham veren buluşmalara
+                    kadar tüm etkinlikleri tek noktadan keşfet.
+                </p>
+            </div>
+
+            <a href="/Event/EventList" class="section-link">
+                Tüm kategoriler →
+            </a>
+        </div>
+
+        <div class="category-grid">
+
+            <a href="/Event/EventList?category=Konser"
+               class="category-card"
+               style="--category-color:#745cff">
+
+                <span class="category-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <path d="M9 18V5l12-2v13"></path>
+                        <circle cx="6" cy="18" r="3"></circle>
+                        <circle cx="18" cy="16" r="3"></circle>
+                    </svg>
+                </span>
+
+                <strong>Konser</strong>
+                <small>Canlı müzik ve festivaller</small>
+            </a>
+
+            <a href="/Event/EventList?category=Tiyatro"
+               class="category-card"
+               style="--category-color:#ff5c8a">
+
+                <span class="category-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <path d="M2 10s3-3 10-3 10 3 10 3"></path>
+                        <path d="M5 9v7c0 3 3 5 7 5s7-2 7-5V9"></path>
+                        <path d="M9 14h.01"></path>
+                        <path d="M15 14h.01"></path>
+                        <path d="M9 17s1 1 3 1 3-1 3-1"></path>
+                    </svg>
+                </span>
+
+                <strong>Tiyatro</strong>
+                <small>Sahnenin büyüsünü yaşa</small>
+            </a>
+
+            <a href="/Event/EventList?category=StandUp"
+               class="category-card"
+               style="--category-color:#ff9f43">
+
+                <span class="category-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <path d="M12 2v20"></path>
+                        <path d="M8 6a4 4 0 0 1 8 0v5a4 4 0 0 1-8 0Z"></path>
+                        <path d="M5 10v1a7 7 0 0 0 14 0v-1"></path>
+                    </svg>
+                </span>
+
+                <strong>Stand-Up</strong>
+                <small>Kahkaha dolu geceler</small>
+            </a>
+
+            <a href="/Event/EventList?category=Sinema"
+               class="category-card"
+               style="--category-color:#16a085">
+
+                <span class="category-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                        <path d="m10 8 6 4-6 4Z"></path>
+                    </svg>
+                </span>
+
+                <strong>Sinema</strong>
+                <small>Özel seans ve gösterimler</small>
+            </a>
+
+            <a href="/Event/EventList?category=TalkShow"
+               class="category-card"
+               style="--category-color:#3498db">
+
+                <span class="category-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"></path>
+                        <path d="M8 9h8"></path>
+                        <path d="M8 13h5"></path>
+                    </svg>
+                </span>
+
+                <strong>Talk Show</strong>
+                <small>Sohbet ve özel konuklar</small>
+            </a>
+
+            <a href="/Event/EventList?category=Festival"
+               class="category-card"
+               style="--category-color:#e84393">
+
+                <span class="category-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <path d="m12 3-1.9 5.8H4l5 3.6-1.9 5.8 4.9-3.6 4.9 3.6-1.9-5.8 5-3.6h-6.1Z"></path>
+                    </svg>
+                </span>
+
+                <strong>Festival</strong>
+                <small>Müzik, eğlence ve deneyim</small>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- FEATURED EVENTS -->
+    <section class="container home-section">
+
+        <div class="section-heading">
+            <div>
+                <span class="section-eyebrow">Popüler etkinlikler</span>
+
+                <h2 class="section-title">
+                    Bu hafta en çok ilgi görenler
+                </h2>
+
+                <p class="section-description">
+                    Biletleri hızla tükenen, kullanıcıların en çok incelediği
+                    etkinlikleri kaçırmadan yerini ayırt.
+                </p>
+            </div>
+
+            <a href="/Event/EventList" class="section-link">
+                Tüm etkinlikleri gör →
+            </a>
+        </div>
+
+        
+    </section>
+
+    <!-- PROMO -->
+    <section class="container">
+        <div class="ticketora-promo">
+
+            <div class="promo-content">
+                <span class="section-eyebrow" style="color:#b8aeff;">
+                    Ticketora ayrıcalığı
+                </span>
+
+                <h2>
+                    Eğlenceyi planlamak artık çok daha kolay.
+                </h2>
+
+                <p>
+                    Ücretsiz hesabını oluştur, sevdiğin etkinlikleri favorilerine ekle,
+                    satın aldığın dijital biletleri tek panel üzerinden görüntüle ve
+                    yaklaşan programlarını takip et.
+                </p>
+
+                <a href="/Account/Register"
+                   class="ticketora-btn ticketora-btn-primary">
+                    Hesabını Oluştur
+                </a>
+            </div>
+
+            <div class="promo-visual">
+                <div class="promo-circle">
+                    <strong>1</strong>
+                    <span>Platform, binlerce an</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
 </div>

@@ -1,0 +1,40 @@
+@model List<Ticketora.Application.Features.CQRSDesignPattern.Categories.Results.GetCategoryQueryResult>
+
+@{
+    ViewData["Title"] = "Admin Kategoriler";
+}
+
+<div class="section-head">
+    <div>
+        <div class="eyebrow">Admin</div>
+        <h1>Kategori Yönetimi</h1>
+        <p>Kategorileri public kategori keşif ekranından ayrı yönet.</p>
+    </div>
+    <a href="/Category/CreateCategory" class="btn btn-primary">Yeni Kategori</a>
+</div>
+
+<div class="surface p-0 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Kategori</th>
+                    <th class="text-end">İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var category in Model)
+                {
+                    <tr>
+                        <td>@category.CategoryId</td>
+                        <td><strong>@category.CategoryName</strong></td>
+                        <td class="text-end">
+                            <a href="/Category/DeleteCategory/@category.CategoryId" class="btn btn-sm btn-outline-danger">Sil</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

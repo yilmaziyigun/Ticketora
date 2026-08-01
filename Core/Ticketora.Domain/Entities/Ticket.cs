@@ -12,12 +12,19 @@ namespace Ticketora.Domain.Entities
 
         public string TicketNumber { get; set; }
 
+        public string UserId { get; set; }
+
         public decimal Price { get; set; }
 
         public DateTime PurchaseDate { get; set; }
 
         public bool IsUsed { get; set; }
 
+        public string? SeatNumber { get; set; }
 
+        public string? QrCodeData { get; set; }
+
+        public int EventId { get; set; }
+        public int ParticipantId { get; set; }
     }
 }

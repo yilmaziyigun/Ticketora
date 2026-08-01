@@ -24,5 +24,15 @@ namespace Ticketora.Application.Features.CQRSDesignPattern.Event.Results
 
         public bool Status { get; set; }
 
+        public int Capacity { get; set; }
+
+        public int SoldTicketCount { get; set; }
+
+        public int RemainingCapacity => Capacity <= 0 ? 0 : Math.Max(Capacity - SoldTicketCount, 0);
+
+        public int CategoryId { get; set; }
+
+        public string CategoryName { get; set; }
+
     }
 }

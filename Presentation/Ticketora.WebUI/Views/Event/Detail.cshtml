@@ -1,0 +1,79 @@
+@model Ticketora.Application.Features.CQRSDesignPattern.Event.Results.GetByIdQueryResult
+
+@{
+    ViewData["Title"] = "Etkinlik Detayı";
+    var hasAvailableCapacity = Model.Capacity <= 0 || Model.RemainingCapacity > 0;
+    var canBook = Model.Status && Model.EventDate >= DateTime.Now && hasAvailableCapacity;
+}
+
+<section class="event-detail-hero mb-4">
+    <img src="@Model.ImageUrl" alt="@Model.Title" />
+    <div class="event-detail-overlay">
+        <div class="eyebrow text-white-50">Etkinlik Detayı</div>
+        <h1>@Model.Title</h1>
+        <p>@Model.Description</p>
+        <div class="d-flex flex-wrap gap-2 mt-3">
+            @if (canBook)
+            {
+                <a href="/Ticket/Book?eventId=@Model.EventId" class="btn btn-primary btn-lg">Book Now</a>
+            }
+            else
+            {
+                <button class="btn btn-secondary btn-lg" disabled>Rezervasyon Kapalı</button>
+            }
+            <a href="/Event/EventList" class="btn btn-outline-light btn-lg">Etkinliklere Dön</a>
+        </div>
+    </div>
+</section>
+
+<div class="detail-info-grid">
+    <section class="surface p-4">
+        <div class="eyebrow mb-2">Program</div>
+        <h2 class="h4 mb-3">Etkinlik Bilgileri</h2>
+        <div class="info-list">
+            <div class="info-item">
+                <span>Tarih ve Saat</span>
+                <strong>@Model.EventDate.ToString("dd.MM.yyyy HH:mm")</strong>
+            </div>
+            <div class="info-item">
+                <span>Konum</span>
+                <strong>@Model.Location</strong>
+            </div>
+            <div class="info-item">
+                <span>Fiyat</span>
+                <strong>@Model.Price.ToString("C")</strong>
+            </div>
+            <div class="info-item">
+                <span>Kontenjan</span>
+                <strong>
+                    @if (Model.Capacity > 0)
+                    {
+                        @($"{Model.RemainingCapacity} / {Model.Capacity} kaldı")
+                    }
+                    else
+                    {
+                        @("Tanımlı değil")
+                    }
+                </strong>
+            </div>
+            <div class="info-item">
+                <span>Durum</span>
+                <strong>@(canBook ? "Rezervasyona Açık" : "Rezervasyon Kapalı")</strong>
+            </div>
+        </div>
+    </section>
+
+    <aside class="surface-soft p-4">
+        <div class="eyebrow mb-2">Bilet</div>
+        <h2 class="h4 mb-3">Dijital bilet akışı</h2>
+        <p class="text-muted">Rezervasyon tamamlandıktan sonra bilet seri numarası, etkinlik bilgileri ve barkod alanı ile kullanıcı panelinde görüntülenir.</p>
+        @if (canBook)
+        {
+            <a href="/Ticket/Book?eventId=@Model.EventId" class="btn btn-primary w-100">Rezervasyona Geç</a>
+        }
+        else
+        {
+            <button class="btn btn-secondary w-100" disabled>Rezervasyon Kapalı</button>
+        }
+    </aside>
+</div>

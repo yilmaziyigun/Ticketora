@@ -1,0 +1,42 @@
+@model List<Ticketora.Application.Features.MediatorDesignPattern.Participants.Results.GetParticipantsQueryResult>
+
+@{
+    ViewData["Title"] = "Admin Katılımcılar";
+}
+
+<div class="section-head">
+    <div>
+        <div class="eyebrow">Admin</div>
+        <h1>Katılımcılar</h1>
+        <p>Rezervasyon ve check-in kayıtları.</p>
+    </div>
+    <a href="/Participant/CreateParticipant" class="btn btn-primary">Yeni Katılımcı</a>
+</div>
+
+<div class="surface p-0 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Ad Soyad</th>
+                    <th>E-posta</th>
+                    <th>Telefon</th>
+                    <th>Check-in</th>
+                    <th>Katıldı</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var participant in Model)
+                {
+                    <tr>
+                        <td><strong>@participant.Name @participant.Surname</strong></td>
+                        <td>@participant.Email</td>
+                        <td>@participant.PhoneNumber</td>
+                        <td>@participant.CheckInDate</td>
+                        <td>@(participant.Attended ? "Evet" : "Hayır")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

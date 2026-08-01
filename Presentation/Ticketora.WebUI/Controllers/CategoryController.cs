@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Ticketora.Application.Features.CQRSDesignPattern.Categories.Commands;
 using Ticketora.Application.Features.CQRSDesignPattern.Categories.Handlers;
+using Ticketora.WebUI.Constants;
 
 namespace Ticketora.WebUI.Controllers
 {
@@ -26,19 +28,25 @@ namespace Ticketora.WebUI.Controllers
             var categories = await _getCategoryQueryHandler.Handle();
             return View(categories);
         }
+
+        [Authorize(Roles = AppRoles.Admin)]
         public IActionResult CreateCategory()
         {
             return View();
         }
+
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> CreateCategory(CreateCategoryCommand command)
         {
             await _createCategoryCommandHandler.Handle(command);
-            return RedirectToAction("CategoryList");
+            return RedirectToAction("Categories", "Admin");
         }
+
+        [Authorize(Roles = AppRoles.Admin)]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             await _removeCategoryCommandHandler.Handle(new RemoveCategoryCommand { CategoryId = id });
-            return RedirectToAction("CategoryList");
+            return RedirectToAction("Categories", "Admin");
         }
     }
 }

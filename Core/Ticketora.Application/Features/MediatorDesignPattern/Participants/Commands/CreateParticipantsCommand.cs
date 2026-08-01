@@ -20,5 +20,7 @@ namespace Ticketora.Application.Features.MediatorDesignPattern.Participants.Comm
         public bool Attended { get; set; }
 
         public DateTime? CheckInDate { get; set; }
+
+        public string? Role { get; set; }
     }
 }

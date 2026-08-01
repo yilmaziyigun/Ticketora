@@ -1,0 +1,67 @@
+@model Ticketora.Application.Features.MediatorDesignPattern.Tickets.Results.GetByIdQueryResult
+
+@{
+    ViewData["Title"] = "Dijital Bilet";
+}
+
+<div class="ticket-frame">
+    <section class="ticket-paper">
+        <div class="ticket-content">
+            <div class="ticket-kicker">Ticketora Admit One</div>
+            <h1>@Model.EventTitle</h1>
+
+            <div class="ticket-info-strip">
+                <div>
+                    <span>Tarih</span>
+                    <strong>@Model.EventDate.ToString("dd.MM.yyyy")</strong>
+                </div>
+                <div>
+                    <span>Saat</span>
+                    <strong>@Model.EventDate.ToString("HH:mm")</strong>
+                </div>
+                <div>
+                    <span>Konum</span>
+                    <strong>@Model.EventLocation</strong>
+                </div>
+            </div>
+
+            <div class="ticket-passenger-grid">
+                <div>
+                    <span>Bilet Sahibi</span>
+                    <strong>@Model.ParticipantName @Model.ParticipantSurname</strong>
+                </div>
+                <div>
+                    <span>İletişim</span>
+                    <strong>@Model.ParticipantEmail</strong>
+                </div>
+                <div>
+                    <span>Koltuk</span>
+                    <strong>@(string.IsNullOrWhiteSpace(Model.SeatNumber) ? "Genel Giriş" : Model.SeatNumber)</strong>
+                </div>
+                <div>
+                    <span>Satın Alma</span>
+                    <strong>@Model.PurchaseDate.ToString("dd.MM.yyyy HH:mm")</strong>
+                </div>
+            </div>
+        </div>
+
+        <aside class="ticket-stub">
+            <div>
+                <span class="ticket-stub-label">Seri No</span>
+                <strong class="ticket-serial">@Model.TicketNumber</strong>
+            </div>
+
+            <div class="barcode" aria-label="Barcode">
+                @for (var i = 0; i < 30; i++)
+                {
+                    var width = i % 4 == 0 ? 5 : 2;
+                    var height = i % 5 == 0 ? 84 : 60;
+                    <span style="display:inline-block;width:@(width)px;height:@(height)px;background:#111;"></span>
+                }
+            </div>
+
+            <small class="text-white-50 text-break">@(Model.QrCodeData ?? Model.TicketNumber)</small>
+            <a href="/UserPanel/Index" class="btn btn-outline-light w-100">Panele Dön</a>
+        </aside>
+    </section>
+</div>

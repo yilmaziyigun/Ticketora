@@ -1,39 +1,47 @@
-﻿@model List<Ticketora.Application.Features.MediatorDesignPattern.Participants.Results.GetParticipantsQueryResult>
+@model List<Ticketora.Application.Features.MediatorDesignPattern.Participants.Results.GetParticipantsQueryResult>
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Katılımcılar";
 }
-<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-<div class="container">
-    <br /><br />
-    <form method="post">
-        <table class="table table-bordered">
+<div class="section-head">
+    <div>
+        <div class="eyebrow">Katılımcılar</div>
+        <h1>Katılımcı Listesi</h1>
+        <p>Etkinlik katılımcılarını görüntüle ve yönet.</p>
+    </div>
+    <a href="/Participant/CreateParticipant" class="btn btn-primary">Yeni Katılımcı</a>
+</div>
+
+<div class="surface p-0 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Surname</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>CheckInDate</th>
-                    <th>Sil</th>
-                    <th>Güncelle</th>
+                    <th>Ad</th>
+                    <th>Soyad</th>
+                    <th>E-posta</th>
+                    <th>Telefon</th>
+                    <th>Check-in</th>
+                    <th class="text-end">İşlemler</th>
                 </tr>
-
-   
+            </thead>
+            <tbody>
                 @foreach (var participant in Model)
                 {
                     <tr>
-                        <td>@participant.Name</td>
+                        <td><strong>@participant.Name</strong></td>
                         <td>@participant.Surname</td>
                         <td>@participant.Email</td>
                         <td>@participant.PhoneNumber</td>
                         <td>@participant.CheckInDate</td>
-                        <td><a href="/Participant/DeleteParticipant/@participant.ParticipantId" class="btn btn-danger">Sil</a></td>
-                        <td><a href="/Participant/UpdateParticipant/@participant.ParticipantId" class="btn btn-success">Güncelle</a></td>
+                        <td class="text-end">
+                            <a href="/Participant/UpdateParticipant/@participant.ParticipantId" class="btn btn-sm btn-outline-primary">Güncelle</a>
+                            <a href="/Participant/DeleteParticipant/@participant.ParticipantId" class="btn btn-sm btn-outline-danger">Sil</a>
+                        </td>
                     </tr>
                 }
-                </<table>
-                <a href "/Participant/CreateParticipant" class="btn btn-primary">Create Participant</a>
-    </form>
-       
+            </tbody>
+        </table>
+    </div>
 </div>

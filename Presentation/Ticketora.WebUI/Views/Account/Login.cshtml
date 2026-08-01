@@ -1,0 +1,35 @@
+@model Ticketora.WebUI.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<div class="auth-shell">
+    <div class="surface p-4 p-md-5">
+        <div class="eyebrow mb-2">Ticketora</div>
+        <h1 class="h3 mb-2">Giriş Yap</h1>
+        <p class="text-muted mb-4">Biletlerini ve profilini görüntülemek için hesabına gir.</p>
+
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">E-posta</label>
+                <input asp-for="Email" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">Parola</label>
+                <input asp-for="Password" type="password" class="form-control" />
+            </div>
+
+            <div class="form-check mb-4">
+                <input asp-for="RememberMe" class="form-check-input" />
+                <label asp-for="RememberMe" class="form-check-label">Beni hatırla</label>
+            </div>
+
+            <button class="btn btn-primary w-100">Giriş Yap</button>
+            <a href="/Account/Register" class="btn btn-link w-100 mt-2">Hesap oluştur</a>
+        </form>
+    </div>
+</div>

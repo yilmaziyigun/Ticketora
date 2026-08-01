@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ticketora.Application.Features.MediatorDesignPattern.Tickets.Commands
 {
-    public class UpdateTicketCommand: IRequest
+    public class UpdateTicketCommand : IRequest
     {
         public int TicketId { get; set; }
         public string TicketNumber { get; set; }

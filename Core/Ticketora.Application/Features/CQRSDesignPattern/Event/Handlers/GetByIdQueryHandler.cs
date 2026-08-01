@@ -28,7 +28,9 @@ namespace Ticketora.Application.Features.CQRSDesignPattern.Event.Handlers
                 EventDate = x.EventDate,
                 Price = x.Price,
                 ImageUrl = x.ImageUrl,
-                Status = x.Status
+                Status = x.Status,
+                Capacity = x.Capacity,
+                SoldTicketCount = _context.Tickets.Count(t => t.EventId == x.EventId)
             }).FirstOrDefaultAsync();
             return value;
         }

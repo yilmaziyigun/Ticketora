@@ -1,0 +1,45 @@
+@{
+    ViewData["Title"] = "Admin";
+}
+
+<div class="section-head">
+    <div>
+        <div class="eyebrow">Admin</div>
+        <h1>Yönetim Paneli</h1>
+        <p>Etkinlik, kategori ve katılımcı yönetimini public UI'dan ayrı tut.</p>
+    </div>
+</div>
+
+<section class="metric-grid mb-4">
+    <div class="metric">
+        <span class="text-muted">Toplam Etkinlik</span>
+        <strong>@ViewBag.EventCount</strong>
+    </div>
+    <div class="metric">
+        <span class="text-muted">Aktif Etkinlik</span>
+        <strong>@ViewBag.ActiveEventCount</strong>
+    </div>
+    <div class="metric">
+        <span class="text-muted">Kategori</span>
+        <strong>@ViewBag.CategoryCount</strong>
+    </div>
+    <div class="metric">
+        <span class="text-muted">Katılımcı</span>
+        <strong>@ViewBag.ParticipantCount</strong>
+    </div>
+</section>
+
+<div class="admin-grid">
+    <a href="/Admin/Events" class="admin-card">
+        <span>Etkinlik Yönetimi</span>
+        <strong>Etkinlikleri düzenle</strong>
+    </a>
+    <a href="/Admin/Categories" class="admin-card">
+        <span>Kategori Yönetimi</span>
+        <strong>Kategorileri düzenle</strong>
+    </a>
+    <a href="/Admin/Participants" class="admin-card">
+        <span>Katılımcılar</span>
+        <strong>Katılımcıları görüntüle</strong>
+    </a>
+</div>

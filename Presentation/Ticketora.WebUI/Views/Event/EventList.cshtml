@@ -1,38 +1,128 @@
-﻿@model List<Ticketora.Application.Features.CQRSDesignPattern.Event.Results.GetEventQueryResult>
+@model List<Ticketora.Application.Features.CQRSDesignPattern.Event.Results.GetEventQueryResult>
+@using Ticketora.Application.Features.CQRSDesignPattern.Categories.Results
+
 @{
-    Layout = null;
+    ViewData["Title"] = "Etkinlikler";
+    var categories = ViewBag.Categories as List<GetCategoryQueryResult> ?? new List<GetCategoryQueryResult>();
+    var locations = ViewBag.Locations as List<string> ?? new List<string>();
+    var selectedCategoryId = ViewBag.CategoryId as int?;
+    var selectedDateFilter = ViewBag.DateFilter as string;
+    var now = DateTime.Now;
 }
-<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-<div class="container">
-    <br />
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Başlık</th>
-                <th>Açıklama</th>
-                <th>Etkinlik Tarihi</th>
-                <th>Lokasyon</th>
-                <th>Fiyat</th>
-                <th>Görsel</th>
-                <th>Sil</th>
-                <th>Güncelle</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
+
+<section class="event-hero mb-4">
+    <div>
+        <div class="eyebrow">Etkinlikleri Keşfet</div>
+        <h1>Biletini almadan önce sahneyi seç.</h1>
+        <p>Konser, sinema, konferans ve özel etkinlikleri filtrele; zamanı geçen etkinliklerde rezervasyon otomatik kapanır.</p>
+    </div>
+</section>
+
+<form method="get" class="filter-panel mb-4">
+    <div>
+        <label class="form-label">Etkinlik ara</label>
+        <input name="search" value="@ViewBag.Search" class="form-control" placeholder="Sanatçı, etkinlik veya açıklama" />
+    </div>
+    <div>
+        <label class="form-label">Kategori</label>
+        <select name="categoryId" class="form-select">
+            <option value="">Tüm kategoriler</option>
+            @foreach (var category in categories)
             {
-                <tr>
-                    <td>@item.Title</td>
-                    <td>@item.Description</td>
-                    <td>@item.EventDate.ToString("dd/MM/yyyy")</td>
-                    <td>@item.Location</td>
-                    <td>@item.Price.ToString("C")</td>
-                    <td><img src="@item.ImageUrl" alt="Event Image" style="max-width: 100px;" /></td>
-                    <td ><a href="/Event/DeleteEvent/@item.EventId" class="btn btn-danger">Sil</a></td>
-                    <td><a href="/Event/UpdateEvent/@item.EventId" class="btn btn-primary">Güncelle</a></td>
-                </tr>
+                <option value="@category.CategoryId" selected="@(selectedCategoryId == category.CategoryId)">
+                    @category.CategoryName
+                </option>
             }
-        </tbody>
-        </table>
-    <a href="/Event/CreateEvent" class="btn btn-success">Yeni Etkinlik Ekle</a>
+        </select>
+    </div>
+    <div>
+        <label class="form-label">Şehir</label>
+        <select name="location" class="form-select">
+            <option value="">Tüm şehirler</option>
+            @foreach (var item in locations)
+            {
+                <option value="@item" selected="@(ViewBag.Location == item)">@item</option>
+            }
+        </select>
+    </div>
+    <div>
+        <label class="form-label">Tarih</label>
+        <select name="dateFilter" class="form-select">
+            <option value="" selected="@(string.IsNullOrWhiteSpace(selectedDateFilter))">Yaklaşanlar</option>
+            <option value="today" selected="@(selectedDateFilter == "today")">Bugün</option>
+            <option value="week" selected="@(selectedDateFilter == "week")">Bu hafta</option>
+            <option value="month" selected="@(selectedDateFilter == "month")">Bu ay</option>
+            <option value="past" selected="@(selectedDateFilter == "past")">Geçmiş etkinlikler</option>
+        </select>
+    </div>
+    <div class="d-grid align-self-end">
+        <button class="btn btn-primary">Filtrele</button>
+    </div>
+</form>
+
+<div class="section-head">
+    <div>
+        <h2>Etkinlikler</h2>
+        <p>@Model.Count etkinlik listeleniyor.</p>
+    </div>
+    <a href="/Event/EventList" class="btn btn-outline-secondary">Filtreleri Temizle</a>
 </div>
+
+@if (!Model.Any())
+{
+    <div class="empty-state">Bu filtrelerle eşleşen etkinlik bulunamadı.</div>
+}
+else
+{
+    <div class="event-grid">
+        @foreach (var item in Model)
+        {
+            var hasAvailableCapacity = item.Capacity <= 0 || item.RemainingCapacity > 0;
+            var canBook = item.Status && item.EventDate >= now && hasAvailableCapacity;
+            <article class="event-card">
+                <div class="event-image-wrap">
+                    <img src="@item.ImageUrl" alt="@item.Title" />
+                    <span class="event-badge">@item.CategoryName</span>
+                    @if (!canBook)
+                    {
+                        <span class="event-badge event-badge-muted">Rezervasyon Kapalı</span>
+                    }
+                </div>
+                <div class="event-card-body">
+                    <h2 class="event-title">@item.Title</h2>
+                    <p class="text-muted mb-3">@item.Description</p>
+
+                    <div class="event-meta">
+                        <span>@item.EventDate.ToString("dd.MM.yyyy HH:mm")</span>
+                        <span>@item.Location</span>
+                        <strong>@item.Price.ToString("C")</strong>
+                    </div>
+                    <div class="event-capacity">
+                        @if (item.Capacity > 0)
+                        {
+                            <span>Kontenjan</span>
+                            <strong>@item.RemainingCapacity / @item.Capacity kaldı</strong>
+                        }
+                        else
+                        {
+                            <span>Kontenjan</span>
+                            <strong>Tanımlı değil</strong>
+                        }
+                    </div>
+
+                    <div class="event-actions">
+                        <a href="/Event/Detail/@item.EventId" class="btn btn-outline-primary">Detay</a>
+                        @if (canBook)
+                        {
+                            <a href="/Ticket/Book?eventId=@item.EventId" class="btn btn-primary">Book Now</a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary" disabled>Book Now</button>
+                        }
+                    </div>
+                </div>
+            </article>
+        }
+    </div>
+}

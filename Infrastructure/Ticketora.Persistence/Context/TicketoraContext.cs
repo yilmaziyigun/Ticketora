@@ -1,23 +1,35 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Ticketora.Domain.Entities;
+using Ticketora.Persistence.Identity;
 
 namespace Ticketora.Persistence.Context
 {
-    public class TicketoraContext : DbContext
+    public class TicketoraContext : IdentityDbContext<ApplicationUser>
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public TicketoraContext()
         {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-9DQS8R7\\MSSQLSERVER01;initial Catalog=TicketOraDb;integrated security=true;TrustServerCertificate=True");
         }
 
-        public async Task SaveChanges(CancellationToken cancellationToken)
+        public TicketoraContext(DbContextOptions<TicketoraContext> options) : base(options)
         {
-            throw new NotImplementedException();
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Server=DESKTOP-9DQS8R7\\MSSQLSERVER01;initial Catalog=TicketOraDb;integrated security=true;TrustServerCertificate=True");
+            }
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Ticket>()
+                .HasIndex(x => x.TicketNumber)
+                .IsUnique();
         }
 
         public DbSet<Category> Categories { get; set; }

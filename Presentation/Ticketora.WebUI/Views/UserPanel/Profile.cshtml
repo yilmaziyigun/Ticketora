@@ -1,0 +1,45 @@
+@model Ticketora.WebUI.Models.ProfileViewModel
+
+@{
+    ViewData["Title"] = "Profil";
+}
+
+<div class="auth-shell wide">
+    <div class="surface p-4 p-md-5">
+        <div class="eyebrow mb-2">Profil</div>
+        <h1 class="h3 mb-4">Profil Bilgileri</h1>
+
+        @if (TempData["ProfileMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["ProfileMessage"]</div>
+        }
+
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Name" class="form-label">Ad</label>
+                    <input asp-for="Name" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Surname" class="form-label">Soyad</label>
+                    <input asp-for="Surname" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label">E-posta</label>
+                    <input asp-for="Email" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="PhoneNumber" class="form-label">Telefon</label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                </div>
+            </div>
+
+            <div class="d-grid d-sm-flex gap-2 mt-4">
+                <button class="btn btn-primary">Kaydet</button>
+                <a href="/UserPanel/Index" class="btn btn-outline-secondary">Panele Dön</a>
+            </div>
+        </form>
+    </div>
+</div>
