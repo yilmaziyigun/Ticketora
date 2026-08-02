@@ -77,10 +77,10 @@ Ticketora
 
 ## Kullanıcı İşlemleri
 
-### [Giriş Sayfası]
+### [Kayıt Sayfası]
 <img width="1359" height="880" alt="kayıt ol" src="https://github.com/user-attachments/assets/05597e4c-a909-4017-9e95-4a61b14aea18" />
 
-### [Kayıt Sayfası]
+### [Giriş Sayfası]
 <img width="1389" height="858" alt="login" src="https://github.com/user-attachments/assets/755a4ec8-0045-4a55-9141-af2a1d3ce559" />
 
 
